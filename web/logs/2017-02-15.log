@@ -1,0 +1,4 @@
+2017-02-15 15:30:54.595 DEBUG WxPayApi: MicroPay request : <xml><appid><![CDATA[wx8b192916eb1dfd8d]]></appid><auth_code><![CDATA[123212321232123212]]></auth_code><body><![CDATA[测试门店的商品]]></body><mch_id><![CDATA[112233]]></mch_id><nonce_str><![CDATA[bda3883c4b534568ba654ed049b708a7]]></nonce_str><out_trade_no><![CDATA[201702153028717]]></out_trade_no><sign><![CDATA[1FDCD4BEEBAEC8C8547191036252AC2E]]></sign><spbill_create_ip><![CDATA[8.8.8.8]]></spbill_create_ip><total_fee>10000</total_fee></xml>
+2017-02-15 15:30:55.009 DEBUG WxPayApi: MicroPay response : <xml><return_code><![CDATA[FAIL]]></return_code>
+<return_msg><![CDATA[mch_id参数长度有误]]></return_msg>
+</xml>

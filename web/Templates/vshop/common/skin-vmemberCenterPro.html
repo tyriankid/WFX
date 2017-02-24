@@ -1,0 +1,299 @@
+﻿<hi:common_header runat="server" />
+<style>
+body{
+    color:#fff;
+    background:url(/images/ad/memberCenterPro_bg.jpg) no-repeat top center;
+    background-size: cover;
+    text-shadow:0 0 5px #000;
+    -webkit-text-shadow:0 0 5px #000;
+}
+img{
+    width:100%;
+    vertical-align:middle;
+}
+.memberInfo{
+    border-bottom:1px solid rgba(255,255,255,0.5);
+    overflow:hidden;
+}
+.memberInfo .headImg{
+    padding:2rem 0 1rem;
+}
+.memberInfo .headImg a{
+    display:block;
+    text-align:center;
+    color:#fff;
+    font-size:16px;
+}
+.memberInfo .headImg a .imgBox{
+    width:30%;
+    border-radius:50%;
+    overflow:hidden;
+    border:5px solid rgba(255,255,255,0.5);
+    box-shadow: 0 0 20px #000;
+    -webkit-box-shadow: 0 0 20px #000;
+    margin:0 auto 10px;
+}
+.memberInfo ul{
+    width:100%;
+    display: flex;
+    display:-webkit-flex;
+}
+.memberInfo ul li{
+    color:#fff;
+    flex-grow:1;
+    text-align:center;
+}
+.memberInfo ul.level{
+    font-size:14px;
+    padding:0 50px;
+}
+.memberInfo ul.order li{
+    padding:15px 0;
+}
+.memberInfo ul.order li a{
+    display:block;
+    font-size:15px;
+    color:#C5C5C5;
+    border-left:1px solid rgba(255,255,255,0.5);
+}
+.memberInfo ul.order li:first-child a{
+    border-left:0;
+}
+.memberInfo ul.order li a .imgBox{
+    display:block;
+    padding-bottom:5px;
+    width:18%;
+    margin:0 auto;
+}
+.memberInfo ul.order li:nth-child(2) a .imgBox{
+    width:23%;
+}
+.menu{
+    padding-top:20px;
+    border-bottom:1px solid rgba(255,255,255,0.5);
+    overflow:hidden;
+}
+.menu li{
+    float:left;
+    width:33.33%;
+    padding-bottom:20px;
+    text-align:center;
+}
+.menu li a{
+    display:block;
+    color:#C5C5C5;
+    font-size:15px;
+}
+.menu li a i{
+    font-style:normal;
+}
+.menu li a .imgBox{
+    display:block;
+    padding-bottom:10px;
+    width:20%;
+    line-height:30px;
+    margin:0 auto;
+}
+</style>
+<div class="memberInfo">
+    <div class="headImg">
+        <a href="/Vshop/UserInfo.aspx?edit=true">
+            <div class="imgBox"><asp:image runat="server" ImageUrl="/images/user-img.png" id="image"></asp:image></div>
+            <p><asp:literal runat="server" id="litUserName" /></p>
+        </a>
+    </div>
+    <ul class="level">
+        <li onclick="location.href = '/Vshop/UserInfo.aspx?edit=true'"><asp:literal id="litUserType" runat="server"></asp:literal></li>
+        <li><asp:literal id="litVantages" runat="server" ></asp:literal></li>
+    </ul>
+    <!--<div><asp:literal id="litHeadline" runat="server"   text=" 推荐人昵称："></asp:literal><asp:literal id="litRecommend" runat="server" ></asp:literal></div>-->
+    <ul class="order">
+        <li>
+            <a href="/Vshop/MemberOrders.aspx?status=0"><span class="imgBox"><img src="/images/ad/icon_qbdd.png" /></span>全部订单</a>
+        </li>
+        <li>
+            <a href="/Vshop/MemberOrders.aspx?status=1"><span class="imgBox"><img src="/images/ad/icon_dfk.png" /></span>待付款<span id="obligation"></span></a>
+        </li>
+        <li>
+            <a href="/Vshop/MemberOrders.aspx?status=3"><span class="imgBox"><img src="/images/ad/icon_psz.png" /></span>配送中<span id="delivery"></span></a>
+        </li>
+        <!--<li runat="server" id="ReturnChangeGoodsArea">
+            <a href="/Vshop/MemberOrderReturn.aspx">退换货</a>
+        </li>-->
+    </ul>
+    <!-- 
+    <div class="info">
+         <div class="title"style="width: 220px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; margin-bottom:2px;">欢迎，【<asp:literal runat="server" id="litMemberGrade" />】</div>
+        <div class="presentExp font-m">
+            <span class="badge badge-danger">消费：¥<asp:literal runat="server" id="litExpenditure" /></span>
+            <a href="logout.aspx"><span class="badge badge-warning">退出登录</span></a>
+            <!--</div>
+    </div> -->
+</div>
+<ul class="menu">
+    <li>
+        <a href="/Vshop/UserInfo.aspx?edit=true"><span class="imgBox"><img src="/images/ad/icon_grzl.png" /></span>个人资料</a>
+    </li>
+    <li> <a href="/Vshop/MyFavorites.aspx"><span class="imgBox" style="width:18%"><img src="/images/ad/icon_wdsc.png" /></span>我的收藏</a>
+    </li>
+    <li>
+        <a href="/Vshop/MyConsultations.aspx"><span class="imgBox"><img src="/images/ad/icon_zx.png" /></span>咨  询</a>
+    </li>
+    <li>
+        <a href="/Vshop/SaleService.aspx"><span class="imgBox"><img src="/images/ad/icon_shfw.png" /></span>售后服务</a>
+    </li>
+    <li>
+        <a href="/Vshop/GetCoupons.aspx"><span class="imgBox"><img src="/images/ad/icon_yhq.png" /></span>优惠券</a>
+    </li>
+    <li>
+        <a href="/Vshop/myredpager.aspx"><span class="imgBox"><img src="/images/ad/icon_wdyhq.png" /></span>我的优惠券(<asp:literal id="litMyCouponCount" runat="server" ></asp:literal>)</a>
+    </li>
+    <li>
+        <a href="/Vshop/myvantages.aspx"><span class="imgBox" style="width: 24%;"><img src="/images/ad/icon_jfdh.png" /></span>积分兑换</a>
+    </li>
+    <li>
+        <a href="/Vshop/EditShippingAddress.aspx"><span class="imgBox"><img src="/images/ad/icon_shdz.png" /></span>收货地址</a>
+    </li>
+    <li>
+        <a href="/Vshop/MystoreMessage.aspx"><span class="imgBox"><img src="/images/ad/icon_lygc.png" /></span>留言广场</a>
+    </li>
+<!--    <li>
+        <a href="/Vshop/Sign.aspx"><span class="imgBox"><img src="/images/ad/icon_qbdd.png" /></span>签到</a>
+    </li>-->
+    <li style="display:none">
+        <a href="/Vshop/FriendQRcode.aspx"><span class="imgBox"><img src="/images/ad/icon_tjhy.png" /></span>推荐好友</a>
+    </li>
+    <li style="display:none">
+        <a href="/Vshop/StoreQRcode.aspx"><span class="imgBox"><img src="/images/ad/icon_qbdd.png" /></span>推广门店</a>
+    </li>
+    <li style="display:none">
+        <a href="/Vshop/TodayOrder.aspx"><span class="imgBox"><img src="/images/ad/icon_qbdd.png" /></span>日结单</a>
+    </li>
+    <li>
+         <a href="/Vshop/GetCouponsEx.aspx"><span class="imgBox" style="width: 22%;"><img src="/images/ad/icon_wxhd.png" /></span>微信活动</a>
+    </li>
+    <li>
+        <a href="logout.aspx"><span class="imgBox"><img src="/images/ad/icon_tc.png" /></span>退出</a>
+    </li>
+<!--    <li>
+        <a><span class="imgBox"><img src="/images/ad/icon_qbdd.png" /></span>更多</a>
+    </li>-->
+
+</ul>
+
+<input type="hidden" id="specialHideShow" runat="server" clientidmode="Static" />
+<input type="hidden" id="isSignOn" runat="server" clientidmode="Static" />
+<script>
+    //禁用右上角菜单
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        WeixinJSBridge.call('hideOptionMenu');
+    });
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $(".memberCenter .user-photo").css({ "left": ($(".memberCenter").width() - $(".memberCenter .user-photo").width()) / 2 + "px" });
+
+        //针对不同的用户进行不同的功能区域隐藏显示
+        var customName = "";
+        if ($("#specialHideShow").val()) {
+            customName = $("#specialHideShow").val();
+            alert(customName);
+            switch (customName) {
+                case "sswk"://爽爽挝啡:去掉 退换货,售后服务,我的咨询, 收货地址改名为我的地址
+                    $("#vMemberCenter_ReturnChangeGoodsArea").hide();
+                    $(".member-service").parent("li").eq(0).hide();
+                    $(".member-refer").parent("li").eq(0).hide();
+                    $(".member-address").html("我的地址");
+                    if ($("[role='userType']").html() == "分销商") //门店特殊功能显示与隐藏
+                    {
+                        $(".member-store").parent("li").eq(0).show();
+                        $(".member-todayOrder").parent("li").eq(0).show();
+                    }
+                    break;
+                case "proLa":
+                    //$(".delivery").html("待收货");
+                    $("#vMemberCenter_ReturnChangeGoodsArea").hide();
+                    $(".member-friend").parent("li").eq(0).show();
+                    if (GetQueryString("orderid")) { //如果支付成功跳转到该页面,则发送支付成功微信模板消息
+                        var orderid = GetQueryString("orderid");
+                        var uid = GetQueryString("uid");
+                        var ajaxUrl = "http://" + window.location.host + "/api/ProductsHandler.ashx?action=sendPaySuccessMsg&orderid="+orderid+"&uid="+uid;
+                        $.ajax({
+                            type: 'get', dataType: 'json', timeout: 10000,
+                            url: ajaxUrl,
+                            success: function (e) {
+                                
+                            }
+                        });
+                    }
+                    var ajaxUrl = "http://" + window.location.host + "/api/ProductsHandler.ashx?action=getMemberCenterOrderNums";
+                    $.ajax({
+                        type: 'get', dataType: 'json', timeout: 10000,
+                        url: ajaxUrl,
+                        success: function (e) {
+                            if (e.waitPay != 0) {
+                                $("#delivery").html('(' + e.waitPay + ')');
+                                $("#delivery").show();
+                            }
+                            if (e.paid != 0) {
+                                $("#obligation").html('(' + e.paid + ')');
+                                $("#obligation").show();
+                            }
+                        }
+                    });
+
+                    var ajaxUrlUpgrade = "http://" + window.location.host + "/api/StoreHandler.ashx?action=getMemberUpgradeInfo";
+                    $.ajax({
+                        type: 'get', dataType: 'json', timeout: 10000,
+                        url: ajaxUrlUpgrade,
+                        success: function (e) {
+                            if (e.isMax == 0) {
+                                alert(e.gradeName);
+                                alert(e.currentPoint);
+                                alert(e.upgradePoint);
+                            }
+                            else if(e.isMax == 1){
+                                alert(e.gradeName);
+                            }
+                            
+                        }
+                    });
+
+                    
+                    
+                    break;
+            }
+        }
+        //是否开启签到活动
+        if ($("#isSignOn").val() == "0") {
+            $(".member-sign").parent("li").eq(0).hide();
+        }
+
+        //如果按钮数量是三的倍数,隐藏[更多]
+        if ($(".member-img-tags").children("li:visible").length % 3 == 1) {
+            $(".shop-no").parent("li").eq(0).hide();
+        }
+        else if ($(".member-img-tags").children("li:visible").length % 3 == 2) {
+            $(".shop-no").closest("ul").append("<li><a class='shop-no'>更多</a></li>");
+        }
+
+
+        var c = $(".user-tags li").length - $(".user-tags li:hidden").length;
+        $(".user-tags li").each(function () {
+            var wid = (Math.round(100 / c) + "%");
+            $(this).css("width", wid);
+        });
+    });
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+
+
+
+</script>
+<Hi:Common_Footer runat="server" />

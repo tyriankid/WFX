@@ -1,0 +1,79 @@
+﻿<hi:common_header runat="server"/>
+<div class="home-head distributor-head distributorCenter">
+    <div class="shop-photo">
+        <a href="DistributorInfo.aspx"><hi:hiimage runat="server" id="imglogo" cssclass="img-circle" imageurl="/Utility/pics/headLogo.jpg" /></a>
+        <span><asp:Image ID="imgGrade" runat="server" Width="20" Height="20"/></span>
+    </div>
+
+    <div class="shop-user-name">
+        <a href="DistributorInfo.aspx"><asp:Literal ID="litStroeName" runat="server"></asp:Literal></a>
+    </div>
+
+	<div class="info">
+       <div class="title"style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; margin-bottom: 2px;"></div>
+        <div class="presentExp font-s">
+            
+        </div>
+    </div>
+    <ul class="order-money">
+        <li>
+            <a href="javascript:;">订单总额<span><Hi:FormatedMoneyLabel ID="saletotal" runat="server" NullToDisplay="0.00"></Hi:FormatedMoneyLabel></span></a>
+        </li>
+        <li>
+            <a href="javascript:;">今日佣金<span><Hi:FormatedMoneyLabel ID="refrraltotal" runat="server"  NullToDisplay="0.00"></Hi:FormatedMoneyLabel></span></a>
+        </li>
+        <li>
+            <a href="javascript:;">今日订单<span><asp:Literal ID="litTodayOrdersNum" runat="server" Text="0"></asp:Literal></span></a>
+        </li>
+    </ul>
+</div>
+<!-- <div class="row custom-row">
+        <div class="col-xs-6">
+            
+            <p class="font-xs text-muted">本店销售总额(元)</p>
+        </div>
+        <div class="col-xs-6">
+            
+            <p class="font-xs text-muted">佣金余额(元)</p>
+        </div>
+        <div class="col-xs-4">
+            <span><asp:Literal ID="litStoreNum" runat="server" Text="0"></asp:Literal></span>
+            <p class="font-xs text-muted">下级分店数</p>
+        </div>
+    </div> -->
+
+<ul class="order-img-tags">
+    <li>
+        <a class="shop-info" href="MyProducts.aspx">店铺商品</a>
+    </li>
+    <asp:Literal ID="litdistirbutors" runat="server"></asp:Literal>
+    <li>
+        <a class="shop-brokerage" href="DistributorCommission.aspx">我的佣金</a>
+    </li>
+    <asp:Literal ID="litQRcode" runat="server"></asp:Literal>
+    <li>
+        <a class="shop-card" href="NameCard.aspx">掌柜名片</a>
+    </li>
+    <li
+        <asp:Literal ID="litOrders" runat="server"></asp:Literal> >
+        <a class="shop-order" href="DistributorOrders.aspx">店铺订单</a>
+    </li>
+    <li>
+        <a class="shop-friend" href="FriendsCircle.aspx">朋友圈素材</a>
+    </li>
+    <li>
+        <a class="shop-top" href="MyRanking.aspx">店铺排名</a>
+    </li>
+</ul>
+<script>
+    //禁用右上角菜单
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        WeixinJSBridge.call('hideOptionMenu');
+    });
+
+    $(function(){
+        $(".distributorCenter .shop-photo").css({"left":($(".distributorCenter").width()-$(".distributorCenter .shop-photo").width())/2+"px"});
+    });
+
+</script>
+<Hi:Common_Footer runat="server" />
