@@ -36,6 +36,7 @@
 </div>  
 
     <input type="hidden" runat="server" id="hidSubInfo" clientidmode="Static" />
+    <input type="hidden" runat="server" id="hidStoreId" clientidmode="Static" />
 
     <script src="/Utility/jquery-1.6.4.min.js"></script>
     <script>
@@ -44,7 +45,7 @@
             var sbjCount = $("[role='sub']").length + 1;
 
             var inputHtml = "<tr role='sub'>" +
-                                                 "<td>商家：" + "<input  type='text'  role='name_" + sbjCount + "'  style='width:100px;height:25px'/> </td>" +
+                "<td><input type='text' value='" + $("#hidStoreId").val() + "' style='display:none'/><input type='button' value='删除' onclick='delTr(this)'/>商家：" + "<input  type='text'  role='name_" + sbjCount + "'  style='width:100px;height:25px'/> </td>" +
                                                  "<td><input type='button' id='addDiscount_" + sbjCount + "' value='增加满减活动' onclick='addDis(this)'/></td>" +
                                         "</tr>";
             $("#subTable").append(inputHtml);
@@ -60,30 +61,59 @@
 
         function initSbjInfo() {
             $("#subArea").show();
-            //根据当前题目和答案的隐藏域凑行html
-            var sbjList = $("#hidSubInfo").val().split(';');//题目列
-            console.log(sbjList);
+            var sbjList = $("#hidSubInfo").val().split(';');
             var inputHtml = "";
             for (var i = 1; i <= sbjList.length; i++) {
                 var valueList = sbjList[i - 1].split(',');
+                
+                //如果当前门店与当前列不匹配,countinue
+                if ($("#hidStoreId").val() != valueList[0]) continue; 
+
                 inputHtml += "<tr role='sub'>" +
-                        "<td>商家：" + "<input  type='text'  role='name_" + i + "' value='" + valueList[0] + "'  style='width:100px;height:25px'/> </td>";
-                for (var o = 1; o < valueList.length; o++) {
+                    "<td><input type='text' value='" + $("#hidStoreId").val() + "' style='display:none'/><input type='button' value='删除' onclick='delTr(this)'/>商家：" + "<input  type='text'  role='name_" + i + "' value='" + valueList[0+1] + "'  style='width:100px;height:25px'/> </td>";
+                for (var o = 1; o < valueList.length-1; o++) {
                     if (o % 2 == 1) {
-                        inputHtml += "<td style='padding-left:30px'> 满<input type='text' onkeyup=\"value=value.replace(/\\D/g,'')\" role='reach' id='reach_" + o + "' value='" + valueList[o] + "' style='width:100px;height:25px'/></td>";
+                        inputHtml += "<td style='padding-left:30px'> 满<input type='text' onkeyup=\"value=value.replace(/\\D/g,'')\" role='reach' id='reach_" + o + "' value='" + valueList[o + 1] + "' style='width:100px;height:25px'/></td>";
                     }
                     else {
-                        inputHtml += "<td> 减<input type='text' onkeyup=\"value=value.replace(/\\D/g,'')\" role='dis' id='dis_" + o + "' value='" + valueList[o] + "' style='width:100px;height:25px'/></td>";
+                        inputHtml += "<td> 减<input type='text' onkeyup=\"value=value.replace(/\\D/g,'')\" role='dis' id='dis_" + o + "' value='" + valueList[o + 1] + "' style='width:100px;height:25px'/></td>";
                     }
                 }
                 inputHtml += "<td><input type='button' id='addDiscount_" + i + "' value='增加满减活动' onclick='addDis(this)'/></td>";
                 inputHtml += "</tr>";
             }
             $("#subTable").append(inputHtml);
+
+            //点击保存按钮之前,并在加载完当前店铺之后,去掉当前店铺的信息,以保证每次保存当前店铺的满减活动时都会清除掉之前保存的.以避免叠加出错
+            var sbjListTemp = $("#hidSubInfo").val().split(';');
+            
+            //去掉当前门店列
+            var c = sbjListTemp.length;
+
+            for (var k = 0; k < c; k++) {
+                if ($("#hidStoreId").val() == sbjListTemp[k].split(',')[0]) {
+                    sbjListTemp[k] = "remove";
+                }
+            }
+            for (var p = 0; p < c; p++) {
+                sbjListTemp.remove("remove");
+            }
+            
+            var infoTemp = "";
+            for (var u = 0; u < sbjListTemp.length; u++)
+            {
+                infoTemp += sbjListTemp[u] + ";";
+            }
+            infoTemp = infoTemp.substr(0, infoTemp.length - 1);
+            $("#hidSubInfo").val(infoTemp);
+        }
+
+        function delTr(e) {
+            $(e).parents().find("tr").eq(0).remove();
         }
 
         function saveSubs() {
-            var subInfo = "";
+            var subInfo = $("#hidSubInfo").val() ? $("#hidSubInfo").val()+";":"";
             var flag = true;
             if ($("tr[role='sub']").length <= 0) {
                 alert("您还未增加至少一个第三方商家!"); flag = false; return false;
@@ -102,6 +132,24 @@
             $("#hidSubInfo").val(subInfo);
             return flag;
         }
+
+        /** 
+        *删除数组指定下标或指定对象 
+        */
+        Array.prototype.remove = function (obj) {
+            for (var i = 0; i < this.length; i++) {
+                var temp = this[i];
+                if (!isNaN(obj)) {
+                    temp = i;
+                }
+                if (temp == obj) {
+                    for (var j = i; j < this.length; j++) {
+                        this[j] = this[j + 1];
+                    }
+                    this.length = this.length - 1;
+                }
+            }
+        } 
 
         $(document).ready(function () {
             initSbjInfo();

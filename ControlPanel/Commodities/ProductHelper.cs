@@ -376,9 +376,9 @@
             return new ProductBatchDao().GetProductBaseInfo(productIds);
         }
 
-        public static DataTable GetTopStoreProductBaseInfo()
+        public static DataTable GetTopStoreProductBaseInfo(int storeId)
         {
-            return new ProductBatchDao().GetTopStoreProductBaseInfo();
+            return new ProductBatchDao().GetTopStoreProductBaseInfo(storeId);
         }
 
         public static bool MutiProductSubmmitReview(string productids)
@@ -402,6 +402,11 @@
             attrs = dao.GetProductAttributes(productId);
             tagsId = dao.GetProductTags(productId);
             return dao.GetProductDetails(productId);
+        }
+
+        public static DataTable GetStoreProductcodes(int storeId)
+        {
+            return new ProductDao().GetStoreProductcodes(storeId);
         }
 
         public static IList<int> GetProductIds(ProductQuery query)

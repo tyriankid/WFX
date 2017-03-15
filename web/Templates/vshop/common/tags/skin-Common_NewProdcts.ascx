@@ -5,6 +5,8 @@
 <li>
     <a href="<%# Globals.ApplicationPath + "/Vshop/ProductDetails.aspx?ProductId=" + Eval("ProductId") %>">
     <img src="<%#Eval("ThumbnailUrl310").ToString().Length>5?Eval("ThumbnailUrl310").ToString():"/utility/pics/none.gif" %>" />
-        <span><%# Eval("ProductName") %></span>
+        <div style="overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;"><%# Eval("ProductName") %></div>
     </a>
 </li>

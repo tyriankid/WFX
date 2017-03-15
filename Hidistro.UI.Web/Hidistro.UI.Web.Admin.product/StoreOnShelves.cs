@@ -19,7 +19,8 @@ namespace Hidistro.UI.Web.Admin.product
 
         private void BindProduct()
         {
-            this.SelectedProducts.DataSource = ProductHelper.GetTopStoreProductBaseInfo();
+            
+            this.SelectedProducts.DataSource = ProductHelper.GetTopStoreProductBaseInfo(ManagerHelper.GetCurrentManager().ClientUserId.ToInt());
             this.SelectedProducts.DataBind();
         }
 
@@ -43,7 +44,17 @@ namespace Hidistro.UI.Web.Admin.product
                     System.Collections.Generic.IList<int> tagsId = null;
                     System.Collections.Generic.Dictionary<int, System.Collections.Generic.IList<int>> dictionary;
                     ProductInfo product = ProductHelper.GetProductDetails(Convert.ToInt32(productid), out dictionary, out tagsId);
-
+                    //获取当前门店下所有商品的productcode,用作重复判断
+                    DataTable dtStoreProductCodes = ProductHelper.GetStoreProductcodes(storeId);
+                    foreach (DataRow row in dtStoreProductCodes.Rows)
+                    {
+                        if (product.ProductCode == row["ProductCode"].ToString())
+                        {
+                            this.ShowMsg("商品编码不能重复！", false);
+                            return;
+                        }
+                    }
+                    
                     product.StoreId = storeId;//当前商品为当前门店所有
                     //爽爽挝啡:新上架的门店商品默认为待审核状态
                     if (Hidistro.ControlPanel.Config.CustomConfigHelper.Instance.AutoShipping && Hidistro.ControlPanel.Config.CustomConfigHelper.Instance.AnonymousOrder)
@@ -80,8 +91,7 @@ namespace Hidistro.UI.Web.Admin.product
 
             if (flag)
             {
-                this.ShowMsg("添加商品成功", true);
-                this.CloseWindow();
+                this.ShowMsgAndCloseWindow("添加商品成功", true);
             }
             /*
             System.Data.DataTable dt = new System.Data.DataTable();

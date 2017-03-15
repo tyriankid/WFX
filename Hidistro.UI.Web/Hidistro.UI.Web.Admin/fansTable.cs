@@ -1,15 +1,8 @@
 using ASPNET.WebControls;
-using Hidistro.ControlPanel.Commodities;
-using Hidistro.ControlPanel.Sales;
 using Hidistro.ControlPanel.Store;
-using Hidistro.Core.Entities;
-using Hidistro.Entities.Comments;
-using Hidistro.Entities.Commodities;
-using Hidistro.Entities.Sales;
 using Hidistro.Entities.Store;
 using Hidistro.UI.ControlPanel.Utility;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.HtmlControls;
@@ -19,7 +12,7 @@ namespace Hidistro.UI.Web.Admin
 	[PrivilegeCheck(Privilege.SaleDetails)]
     public class fansTable : AdminPage
 	{
-		protected System.Web.UI.WebControls.Button btnQuery;
+		protected Button btnQuery;
 		protected WebCalendar calendarEnd;
 		protected WebCalendar calendarStart;
         protected DropDownList DDLservice;
@@ -109,10 +102,10 @@ namespace Hidistro.UI.Web.Admin
 				this.endTime = this.calendarEnd.SelectedDate;
 			}          			
 		}
-        protected void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
 
-            this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
+            btnQuery.Click += new EventHandler(this.btnQuery_Click);
 			this.LoadParameters();
 			if (!this.Page.IsPostBack)
 			{

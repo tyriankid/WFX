@@ -61,7 +61,8 @@ namespace Hidistro.UI.Web.Admin
 				SortOrder = SortAction.Desc,
 				BrandId = this.dropBrandList.SelectedValue.HasValue ? this.dropBrandList.SelectedValue : null,
 				SortBy = "DisplaySequence",
-                StoreId = currentManager.ClientUserId
+                StoreId = currentManager.ClientUserId,
+                ReviewState = -1,
 			};
 			if (this.categoryId.HasValue)
 			{

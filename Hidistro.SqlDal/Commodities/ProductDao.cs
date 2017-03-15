@@ -490,6 +490,15 @@
             return list;
         }
 
+        public DataTable GetStoreProductcodes(int storeId)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(string.Format("select distinct( ProductCode) from hishop_products where storeid = {0}", storeId));
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+
         public DbQueryResult GetProducts(ProductQuery query)
         {
             StringBuilder builder = new StringBuilder();

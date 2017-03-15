@@ -927,6 +927,10 @@
             {
                 info.Sender = (string)reader["Sender"];
             }
+            if(DBNull.Value != reader["Cash"])
+            {
+                info.pcCash = (decimal)reader["Cash"];
+            }
             return info;
         }
 

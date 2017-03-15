@@ -205,7 +205,7 @@ function getMin(num1, num2) { return roundFun((parseFloat(num1) - parseFloat(num
 
 
 //num1商品单价,num2商品数量,num3:买一送一数量,num4:半价数量
-function getX(num1, num2, num3,num4) {
+function getX(num1, num2, num3, num4) {
     if (num3 == null || num3 == "") {
         num3 = "0";
     }
@@ -214,8 +214,8 @@ function getX(num1, num2, num3,num4) {
     }
     //将每种优惠方式统计起来,以便于提交时候展示
     givebuyTotal = givebuyTotal + parseFloat(num1) * parseFloat(num3);
-    halfbuyTotal = halfbuyTotal + parseFloat(num1) * (parseFloat(num1) / 2 * num4);
-
+    halfbuyTotal = halfbuyTotal + parseFloat(num4) * (parseFloat(num1) / 2 * num4);
+    
     return roundFun((parseFloat(num1) * (parseFloat(num2) - parseFloat(num3))) - ((parseFloat(num1) / 2 * num4)), 2);
 }
 
@@ -463,7 +463,7 @@ function submmitorder() {
 
     var ajaxData = {
         action: "Submmitorder", shipDistributorId: $('#distributorSelect').val(), shippingType: ShippingType, paymentType: PaymentType, couponCode: $("#txtCouponCode").val(), redpagerid: $("#selectRedPager").val(), shippingId: ShipTo,
-        productSku: getParam("productSku"), buyAmount: getParam("buyAmount"), from: getParam("from"), shiptoDate: $("#selectShipToDate").val(), groupbuyId: $('#groupbuyHiddenBox').val(), countdownId: $('#countdownHiddenBox').val(), cutdownId: $('#cutdownHiddenBox').val(), remark: $('#remark').val(), pcDiscountAmount: $("#txtDiscount").val()
+        productSku: getParam("productSku"), buyAmount: getParam("buyAmount"), from: getParam("from"), shiptoDate: $("#selectShipToDate").val(), groupbuyId: $('#groupbuyHiddenBox').val(), countdownId: $('#countdownHiddenBox').val(), cutdownId: $('#cutdownHiddenBox').val(), remark: $('#remark').val(), pcDiscountAmount: $("#txtDiscount").val(), cash: $("#Sshi").val()
     };
     if (ThirdPayMode === "on") {
         ajaxData = {
@@ -523,8 +523,9 @@ function FinishOrderAndPrint(OrderId, isMicroPay) {
             //打印
             $.post("/api/VshopProcess.ashx?action=PrintOrderInfo", data, function (json) {
                 if (json.success === true) {
-                    //$("#printDiv").show();
+                    $("#printDiv").show();
                     $("#printDiv").html(json.inHtml);
+                    return;
                     batchPrintData();
                     batchPrintData();
                     batchPrintData();

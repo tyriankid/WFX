@@ -75,9 +75,14 @@
         /// 获取总店的所有商品基本信息,门店上架自己商品时使用.
         /// </summary>
         /// <returns></returns>
-        public DataTable GetTopStoreProductBaseInfo()
+        public DataTable GetTopStoreProductBaseInfo(int storeId)
         {
-            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(string.Format("SELECT ProductId, ProductName, ProductCode, MarketPrice, ThumbnailUrl40, SaleCounts, ShowSaleCounts FROM Hishop_Products  where (storeid is null or storeid = 0) and salestatus != 0"));
+            string sql = string.Format("SELECT ProductId, ProductName, ProductCode, MarketPrice, ThumbnailUrl40, SaleCounts, ShowSaleCounts FROM Hishop_Products  where (storeid is null or storeid = 0) and salestatus != 0 ");
+            if (storeId > 0)
+            {
+                sql += string.Format(" and productcode not in (select distinct( ProductCode) from hishop_products where storeid ={0})", storeId);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(sql);
             using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
             {
                 return DataHelper.ConverDataReaderToDataTable(reader);

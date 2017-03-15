@@ -507,6 +507,8 @@
 
         public string ZipCode { get; set; }
 
+        public decimal pcCash { get; set; }
+
         public OrderItemStatus ItemStatus { get; set; }
 
         /// <summary>

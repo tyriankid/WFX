@@ -379,16 +379,20 @@
         var kHtml = "";//第三方满减活动html
         for (var i = 1; i <= sbjList.length; i++) {
             var valueList = sbjList[i - 1].split(',');
-            inputHtml += '<input type="checkbox" chk="thirdWay" value="' + valueList[0] + '"/>' + valueList[0];
+
+            //如果当前门店与当前列不匹配,countinue
+            if ($("#PCProductSearchBuy_txtStoreId").val() != valueList[0]) continue; 
+
+            inputHtml += '<input type="checkbox" chk="thirdWay" value="' + valueList[0+1] + '"/>' + valueList[0+1];
             
 
-            for (var o = 1; o < valueList.length; o++) {
+            for (var o = 1; o < valueList.length-1; o++) {
                 if (o % 2 == 1) {
-                    kHtml += "<k style='display:none' role='thirdWay_" + valueList[0] + "' >";
-                    kHtml += '<input type="checkbox" chk="thirdWay_chk_' + valueList[0] + '"  reachMoney="' + valueList[o] + '" discountMoney="' + valueList[o + 1] + '"/> 满' + valueList[o];
+                    kHtml += "<k style='display:none' role='thirdWay_" + valueList[0+1] + "' >";
+                    kHtml += '<input type="checkbox" chk="thirdWay_chk_' + valueList[0+1] + '"  reachMoney="' + valueList[o+1] + '" discountMoney="' + valueList[o + 1+1] + '"/> 满' + valueList[o+1];
                 }
                 else {
-                    kHtml += "减" + valueList[o] + "</k>";
+                    kHtml += "减" + valueList[o+1] + "</k>";
                 }
             }
             

@@ -1435,9 +1435,9 @@ namespace Hidistro.UI.Web.API
             double TopPrice = 0.00;//购物车中最高价格值
             //double AvgPrice = 0.00;//购物车商品单价的平均价
             //double SumPrice = 0.00;//购物车商品单价的综合
-            int SumQuantity = 0;
-            int SumGiveQuantity = 0;
-            int ReadQuantity = 0;
+            int SumQuantity = 0;//订单总数量
+            int SumGiveQuantity = 0;//赠送总数量
+            int ReadQuantity = 0;//
             int ReadGiveQuantity = 0;
 
             double price = 0;//变量送商品的价格值
@@ -1484,10 +1484,11 @@ namespace Hidistro.UI.Web.API
                         //累加已计算的
                         ReadQuantity += quantity;
                         ReadGiveQuantity += GiveQuantity;
-
-                        if ((ReadQuantity / 2 - ReadGiveQuantity) >= 1)
+                        if (ReadQuantity == SumQuantity)//从价格最低的开始赠送
+                        //从第二高价并且还可以送的商品开始TopPrice > value
+                        //if ((ReadQuantity / 2 - ReadGiveQuantity) >= 1)
                         {
-                            //从第二高价并且还可以送的商品开始TopPrice > value
+                           
                             if (quantity > GiveQuantity)
                             {
                                 strSkuId = dr["SkuId"].ToString();
@@ -1616,8 +1617,8 @@ namespace Hidistro.UI.Web.API
                         //累加已计算的
                         ReadQuantity += quantity;
                         ReadHalfQuantity += HalfQuantity;
-
-                        if ((ReadQuantity / 2 - ReadHalfQuantity) >= 1)
+                        if (ReadQuantity == SumQuantity)//从便宜的商品开始送
+                        //if ((ReadQuantity / 2 - ReadHalfQuantity) >= 1)
                         {
                             //从第二高价并且还可以送的商品开始TopPrice > value
                             if (quantity > HalfQuantity)
@@ -2585,6 +2586,11 @@ namespace Hidistro.UI.Web.API
                     }
                     //应收
                     builder.AppendFormat("<div style='text-align:left;width:100%;font-size:26px'><span style='font-size:26px'>应收： </span>￥{0}</div>", System.Math.Round(order.GetAmount() - order.CouponValue - order.DiscountAmount, 2));
+                    //实收
+                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:16px'><span style='font-size:16px'>现金： </span>￥{0}</div>", order.pcCash.ToString("F2"));
+                    //找零
+                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:16px'><span style='font-size:16px'>找零： </span>￥{0}</div>",((order.pcCash - order.GetAmount() - order.CouponValue - order.DiscountAmount )).ToString("F2"));
+
                     //插入二维码start-----------
                     SiteSettings masterSettings = SettingsManager.GetMasterSettings(false);
                     string savepath = System.Web.HttpContext.Current.Server.MapPath("~/Storage/TicketImage") + "\\" + string.Format("distributor_{0}", currentSenderDistributor) + ".jpg";
@@ -2891,6 +2897,7 @@ namespace Hidistro.UI.Web.API
             string pcThirdPayWay =string.IsNullOrEmpty(context.Request["thirdPayWay"])?null:context.Request["thirdPayWay"].ToString();//pc点餐第三方来源
 
             decimal pcDiscountAmount = context.Request["pcDiscountAmount"].ToDecimal();//pc点餐系统优惠价格
+            decimal pcCash = context.Request["cash"].ToDecimal();//pc端点餐实收金额
 
             bool isFreeShipping = Convert.ToBoolean(context.Request["isFreeShipping"]);//订单是否包邮
             bool flagGroupBuy = (int.TryParse(context.Request["groupbuyId"], out groupbuyId) && groupbuyId != 0);
@@ -3242,6 +3249,11 @@ namespace Hidistro.UI.Web.API
                 {
                     orderInfo.DiscountAmount = pcThirdPayDiscount; //不是基于优惠上再优惠,而是直接写入优惠的值,因为第三方平台支付写入的已经是结果了,无需再经系统的优惠
                     orderInfo.InvoiceTitle = pcThirdPayWay;//第三方支付方方式,暂时用InvoiceTitle代替
+                }
+                //pc端现金支付记录
+                if(pcCash > 0m)
+                {
+                    orderInfo.pcCash = pcCash;
                 }
                 //优惠券
                 if (!string.IsNullOrEmpty(str))

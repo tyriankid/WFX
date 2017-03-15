@@ -5,7 +5,9 @@
 <a href="ProductList.aspx?BrandId=<%# Eval("BrandId")%>">
     <div class="well">
         <img src="<%# Eval("Logo")%>" class="img-responsive">
-        <div class="name font-l">
+        <div class="name font-l" style="overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;">
             <%# Eval("BrandName")%></div>
     </div>
 </a>

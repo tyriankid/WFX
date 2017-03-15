@@ -192,6 +192,16 @@
             }
         }
 
+        protected virtual void ShowMsgAndCloseWindow(string msg, bool success)
+        {
+            string str = "ShowMsg(\""+msg+"\", "+(success ? "true" : "false")+") ;setTimeout(function(){var win = art.dialog.open.origin; win.location.reload();},800);";
+            if (!this.Page.ClientScript.IsClientScriptBlockRegistered("ServerMessageScript"))
+            {
+                this.Page.ClientScript.RegisterStartupScript(base.GetType(), "ServerMessageScript", "<script language='JavaScript' defer='defer'>setTimeout(function(){" + str + "},300);</script>");
+            }
+        }
+
+
         protected virtual void ShowMsgAndReUrl(string msg, bool success, string url)
         {
             string str = string.Format("ShowMsgAndReUrl(\"{0}\", {1}, \"{2}\")", msg, success ? "true" : "false", url);

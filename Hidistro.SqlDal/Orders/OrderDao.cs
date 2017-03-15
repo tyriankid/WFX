@@ -161,6 +161,7 @@
             this.database.AddInParameter(storedProcCommand, "ThirdCommission", DbType.Decimal, orderInfo.ThirdCommission);
             if (!string.IsNullOrEmpty(orderInfo.Sender))
                 this.database.AddInParameter(storedProcCommand, "Sender", DbType.String, orderInfo.Sender);
+            this.database.AddInParameter(storedProcCommand, "Cash", DbType.Decimal, orderInfo.pcCash);//实收现金
             return (this.database.ExecuteNonQuery(storedProcCommand, dbTran) == 1);
         }
 
