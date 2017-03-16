@@ -1487,6 +1487,26 @@ namespace Hidistro.UI.Web.Admin
             int thirdPayCount = 0;//第三方订单总数
             decimal thirdPayTotalPrice = 0m;//第三方订单的总价
             decimal thirdPayDiscountTotalPrice = 0m;//第三方订单优惠的总价
+
+            Dictionary<string, int> dicThirdPayCount = new Dictionary<string, int>(); //第三方订单总数键值对
+            Dictionary<string, decimal> dicThirdPayTotalPrice = new Dictionary<string, decimal>(); //第三方订单的总价键值对
+            Dictionary<string, decimal> dicThirdPayDiscountTotalPrice = new Dictionary<string, decimal>(); //第三方订单优惠的总价
+            //第三方的处理
+            int currentStoreId = ManagerHelper.GetCurrentManager().ClientUserId.ToInt();
+            SiteSettings masterSettings = SettingsManager.GetMasterSettings(false);
+            string[] thirdInfos = masterSettings.thirdWayDiscountInfo.Split(';');
+            List<string> thirdWays = new List<string>();
+            for (int i = 0; i < thirdInfos.Length; i++)
+            {
+                string[] valueList = thirdInfos[i].Split(',');
+                //如果当前门店与当前列不匹配,countinue
+                if (currentStoreId != valueList[0].ToInt()) continue;
+                dicThirdPayCount.Add(valueList[1], 0);
+                dicThirdPayTotalPrice.Add(valueList[1], 0m);
+                dicThirdPayDiscountTotalPrice.Add(valueList[1], 0m);
+                thirdWays.Add(valueList[1]);
+            }
+
             decimal directDiscountTotalPrice = 0m;//pc端直接优惠的总价
             decimal manjianDiscountTotalPrice = 0m;//满减活动优惠的总价
 
@@ -1563,15 +1583,19 @@ namespace Hidistro.UI.Web.Admin
                             microPayOrderCount++;
                             microPayOrderTotalPrice += order.GetTotal();
                         }
+                        
+
+
                         //第三方订单的总价和数量以及优惠的总价
-                        if (!string.IsNullOrEmpty(order.InvoiceTitle))
+                        if (!string.IsNullOrEmpty(order.InvoiceTitle) && dicThirdPayCount.Keys.Contains(order.InvoiceTitle))
                         {
+                            dicThirdPayCount[order.InvoiceTitle]++;
+                            dicThirdPayTotalPrice[order.InvoiceTitle] += order.GetTotal();
+                            dicThirdPayDiscountTotalPrice[order.InvoiceTitle] += order.DiscountAmount;
+
                             thirdPayCount++;
                             thirdPayTotalPrice += order.GetTotal();
                             thirdPayDiscountTotalPrice += order.DiscountAmount;
-
-                            
-                            
                         }
                         //直接优惠(没有第三方来源,没有activitiesId的情况)
                         if (string.IsNullOrEmpty(order.InvoiceTitle) && string.IsNullOrEmpty(order.ActivitiesId) && order.DiscountAmount>0)
@@ -1682,13 +1706,22 @@ namespace Hidistro.UI.Web.Admin
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;text-align:right;padding-bottom:3px;'><span>半价减免：</span>{0}</div>", Convert.ToDouble(halfPrice));
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;padding-bottom:3px;'><span>优惠券数量：</span>{0}</div>", couponCount);
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;text-align:right;padding-bottom:3px;'><span>优惠券减免：</span>{0}</div>", Convert.ToDouble(couponTotalPrice));
+                builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;padding-bottom:3px;'><span>店内优惠：</span>{0}</div>", Convert.ToDouble(directDiscountTotalPrice));
+                builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;text-align:right;padding-bottom:3px;'><span>店内满减优惠：</span>{0}</div>", Convert.ToDouble(manjianDiscountTotalPrice));
 
+                for (int o = 0; o < thirdWays.Count; o++)
+                {
+                    builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;{2}padding-bottom:3px;'><span>{0}订单数：</span>{1}</div>", thirdWays[o],dicThirdPayCount[thirdWays[o]], (o+1) % 2 > 0?"": "text-align:right;");
+                    builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;{2}padding-bottom:3px;'><span>{0}消费：</span>{1}</div>", thirdWays[o], Convert.ToDouble(dicThirdPayTotalPrice[thirdWays[o]]), (o+1) % 2 > 0 ? "text-align:right;" : "");
+                    builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;{2}padding-bottom:3px;'><span>{0}优惠：</span>{1}</div>", thirdWays[o], Convert.ToDouble(dicThirdPayDiscountTotalPrice[thirdWays[o]]), (o+1) % 2 > 0 ? "" : "text-align:right;");
+                }
+                /*
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;padding-bottom:3px;'><span>第三方订单数：</span>{0}</div>", thirdPayCount);
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;text-align:right;padding-bottom:3px;'><span>第三方消费：</span>{0}</div>", Convert.ToDouble(thirdPayTotalPrice));
                 builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;padding-bottom:3px;'><span>第三方优惠：</span>{0}</div>", Convert.ToDouble(thirdPayDiscountTotalPrice));
-                builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;text-align:right;padding-bottom:3px;'><span>店内优惠：</span>{0}</div>", Convert.ToDouble(directDiscountTotalPrice));
-                builder.AppendFormat("<div style='width:50%;float:left;font-size:14px;padding-bottom:3px;'><span>店内满减优惠：</span>{0}</div>", Convert.ToDouble(manjianDiscountTotalPrice));
+                */
 
+                
 
 
                 //builder.AppendFormat("<div style='text-align:center;width:100%;font-size:14px;font-weight:bold;margin-top:30px;'>谢谢光临！Thank you for coming</div><div style='text-align:center;width:100%;font-size:12px;'>广东爽爽挝啡快饮有限公司</div>");

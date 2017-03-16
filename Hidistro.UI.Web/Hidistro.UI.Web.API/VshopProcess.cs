@@ -2585,11 +2585,28 @@ namespace Hidistro.UI.Web.API
                         builder.AppendFormat("<div style='font-size:12px;margin:5px 0;'><span>第二杯半价： </span>-￥{0}</div>", System.Math.Round(halfBuyPrice, 2));
                     }
                     //应收
-                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:26px'><span style='font-size:26px'>应收： </span>￥{0}</div>", System.Math.Round(order.GetAmount() - order.CouponValue - order.DiscountAmount, 2));
+                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:26px'><span style='font-size:26px'>应收： </span>￥{0}</div>", System.Math.Round(order.GetAmount() - order.CouponValue - order.DiscountAmount, 2));//order.GetTotal().ToString("F2"));
                     //实收
                     builder.AppendFormat("<div style='text-align:left;width:100%;font-size:16px'><span style='font-size:16px'>现金： </span>￥{0}</div>", order.pcCash.ToString("F2"));
                     //找零
-                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:16px'><span style='font-size:16px'>找零： </span>￥{0}</div>",((order.pcCash - order.GetAmount() - order.CouponValue - order.DiscountAmount )).ToString("F2"));
+                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:16px'><span style='font-size:16px'>找零： </span>￥{0}</div>", (order.pcCash - System.Math.Round(order.GetAmount() - order.CouponValue - order.DiscountAmount, 2)).ToString("F2"));
+
+                    string payType = "";
+                    //打印出支付方式
+                    if ((order.Username == "[堂食用户]" || order.Username == "[匿名用户]" || order.Username == "[活动用户]") && order.RealModeName == "微信扫码支付")
+                    {
+                        payType = "微信扫码支付";
+                    }
+                    else
+                    {
+                        payType = "现金支付";
+                    }
+                    if (!string.IsNullOrEmpty(order.InvoiceTitle))
+                    {
+                        payType = "第三方支付:" + order.InvoiceTitle;
+                    }
+                    builder.AppendFormat("<div style='text-align:left;width:100%;font-size:13px'><span style='font-size:13px'>支付方式： </span>{0}</div>", payType);
+
 
                     //插入二维码start-----------
                     SiteSettings masterSettings = SettingsManager.GetMasterSettings(false);

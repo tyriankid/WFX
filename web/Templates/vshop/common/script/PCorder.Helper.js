@@ -468,7 +468,7 @@ function submmitorder() {
     if (ThirdPayMode === "on") {
         ajaxData = {
             action: "Submmitorder", shipDistributorId: $('#distributorSelect').val(), shippingType: ShippingType, paymentType: PaymentType, couponCode: $("#txtCouponCode").val(), redpagerid: $("#selectRedPager").val(), shippingId: ShipTo,
-            productSku: getParam("productSku"), buyAmount: getParam("buyAmount"), from: getParam("from"), shiptoDate: $("#selectShipToDate").val(), groupbuyId: $('#groupbuyHiddenBox').val(), countdownId: $('#countdownHiddenBox').val(), cutdownId: $('#cutdownHiddenBox').val(), remark: $('#remark').val(), pcDiscountAmount: $("#txtDiscount").val(),
+            productSku: getParam("productSku"), buyAmount: getParam("buyAmount"), from: getParam("from"), shiptoDate: $("#selectShipToDate").val(), groupbuyId: $('#groupbuyHiddenBox').val(), countdownId: $('#countdownHiddenBox').val(), cutdownId: $('#cutdownHiddenBox').val(), remark: $('#remark').val(), pcDiscountAmount: $("#txtDiscount").val(), cash: $("#thirdPayCash").val(),
             thirdPayCash: parseFloat($("#thirdPayCash").val()), thirdPayDiscount: parseFloat($("#thirdPayDiscount").val()) + thirdDisMoney, thirdPayWay: $("[chk='thirdWay']:checked").val()
         };
     }
@@ -523,9 +523,11 @@ function FinishOrderAndPrint(OrderId, isMicroPay) {
             //打印
             $.post("/api/VshopProcess.ashx?action=PrintOrderInfo", data, function (json) {
                 if (json.success === true) {
+                    /*
                     $("#printDiv").show();
                     $("#printDiv").html(json.inHtml);
                     return;
+                    */
                     batchPrintData();
                     batchPrintData();
                     batchPrintData();
@@ -622,7 +624,12 @@ function roundFun(numberRound, roundDigit)   //四舍五入，保留位数为rou
     }
 }
 
-function closeThirdPayDiv() {
+function closeThirdPayDiv(t) {
+    
+    if (t == "micropay") {
+        $("#MicroPay").find("p").html("关闭中..请稍候..");
+        Clear(); return;
+    }
     $(".sumCof-Box").hide();
     $(".sumCount-Box").hide();
     $(".payThird-Box").hide();
